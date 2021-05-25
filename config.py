@@ -13,6 +13,7 @@ class Config():
         # The number of output channels is 2x in the encoder, x/2 in the decoder.
         
         self.saveModel = True
+        self.variationalTranslation = 0
 
         ### -------------------- ###
         ###  TRAINING PARAMETERS ###

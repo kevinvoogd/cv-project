@@ -8,6 +8,7 @@ from einops import rearrange, repeat
 from timm.scheduler.cosine_lr import CosineLRScheduler
 import torchvision
 from torchvision import datasets, models, transforms
+from torchinfo import summary
 
 import matplotlib.pyplot as plt
 import time
@@ -21,42 +22,64 @@ from swin_dataset import SwinDataset
 from swin_transformer import SwinTransformer
 
 
-config = Config()
-### ----- LOAD DATA ----- ###
-train_xform = transforms.Compose([
-    transforms.Resize((config.input_size, config.input_size)),
-    transforms.ToTensor()
-])
+def main():
+    config = Config()
 
-train_ds = SwinDataset("train", train_xform)
-train_dataloader = torch.utils.data.DataLoader(
-    train_ds, batch_size=config.batch_size, num_workers=4, shuffle=True)
+    ### ----- LOAD DATA ----- ###
+    train_xform = transforms.Compose([
+        transforms.Resize((config.input_size, config.input_size)),
+        transforms.ToTensor()
+        ])
 
-model = SwinTransformer(hidden_dim = 96, layers= (2, 2, 6, 2), heads= (3, 6, 12, 24), channels=3, num_classes=10, head_dim=32, window_size=7,
-                 downscaling_factors=(4, 2, 2, 2), relative_pos_embedding=True)
+    train_ds = SwinDataset("train", train_xform)
+    train_dataloader = torch.utils.data.DataLoader(
+        train_ds, batch_size=config.batch_size, num_workers=4, shuffle=True)
 
-n_parameters = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    model = SwinTransformer(hidden_dim = 96, layers= (2, 2, 6, 2), heads= (3, 6, 12, 24), channels=3, num_classes=10, head_dim=32, window_size=7,
+                    downscaling_factors=(4, 2, 2, 2), relative_pos_embedding=True)
+    model.cuda()
 
-# Define optimizer and parameter
+    n_parameters = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    print('The model has: ',n_parameters, 'parameters')
 
-optimizer = torch.optim.AdamW(model,
-                              lr=config.training_opt_lr,
-                              betas=config.training_opt_betas,
-                              eps=config.training_opt_eps,
-                              weight_decay=config.training_opt_weight_decay,
-                              amsgrad=False)
-                              
-'''
-# Define Scheduler and parameters
-lr_scheduler = CosineLRScheduler(optimizer,
-                                 t_initial=config.num_steps,
-                                 t_mul=1.,
-                                 lr_min=config.training_sch_minimum_lr,
-                                 warmup_lr_init=config.training_sch_warmup_lr,
-                                 warmup_t=config.training_sch_warmup_steps,
-                                 cycle_limit=1,
-                                 t_in_epochs=False
-                                 )
+    # Define optimizer and parameter
 
-# Define Loss Function
-loss = torch.nn.CrossEntropyLoss()'''
+    optimizer = torch.optim.AdamW(model.parameters(), 
+                                lr=config.training_opt_lr, 
+                                betas=config.training_opt_betas, 
+                                eps=config.training_opt_eps, 
+                                weight_decay=config.training_opt_weight_decay,
+                                amsgrad=False)
+
+    # Define Scheduler and parameters
+    lr_scheduler = CosineLRScheduler(optimizer,
+                                    t_initial=config.num_steps,
+                                    t_mul=1.,
+                                    lr_min=config.training_sch_minimum_lr,
+                                    warmup_lr_init=config.training_sch_warmup_lr,
+                                    warmup_t=config.training_sch_warmup_steps,
+                                    cycle_limit=1,
+                                    t_in_epochs=False
+                                    )
+
+    # Define Loss Function
+    loss = torch.nn.CrossEntropyLoss()
+
+    max_accuracy = 0.0
+    model.train()
+    optimizer.zero_grad()
+    start_time = time.time()
+    for epoch in range(config.starting_epoch, config.num_epochs):
+        for i, [input,class_encoded, class_names,output] in enumerate(train_dataloader,0):
+
+                input = input.cuda(non_blocking=True)
+                targets = class_encoded.cuda(non_blocking=True)
+                outputs = model(input)
+
+
+    total_time = time.time() - start_time
+    total_time_str = str(datetime.timedelta(seconds=int(total_time)))
+    print(outputs)
+
+if __name__ == "__main__":
+    main()
