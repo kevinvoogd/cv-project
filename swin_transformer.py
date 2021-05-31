@@ -113,6 +113,10 @@ class WindowAttention(nn.Module):
 
         dots = einsum('b h w i d, b h w j d -> b h w i j', q, k) * self.scale
 
+        self.relative_indices = self.relative_indices.long()
+        #print("Type of relative_ indices",self.relative_indices.type())
+        #print("Type of pos_embedding",self.pos_embedding.type())
+
         if self.relative_pos_embedding:
             dots += self.pos_embedding[self.relative_indices[:, :, 0], self.relative_indices[:, :, 1]]
         else:
