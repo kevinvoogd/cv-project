@@ -83,26 +83,40 @@ def main():
         for i, [input,class_encoded, class_names,output] in enumerate(train_dataloader,0):
                 optimizer.zero_grad()
                 input = input.cuda(non_blocking=True)
+                class_encoded = torch.argmax(class_encoded, dim=1)
                 targets = class_encoded.cuda(non_blocking=True)
-                print("target type", torch.max(targets,1))
+                #print("target type", torch.max(targets,1))
                 outputs = model.forward(input)
 
-                print("output type", torch.max(outputs,1))
-                outputs = outputs.long()
-                ce_loss = loss(torch.max(targets,1), torch.max(outputs,1))
+                #print("output type", torch.max(outputs,1))
+
+                ce_loss = loss(outputs, targets)
                 ce_loss.backward()
                 optimizer.step()
-                scheduler.step()
-                print("GT", classs_encoded)
-                print("")
-                print("Prediction", outputs)
-                break
-
-                #if i%50 == 0:
-                    #print(i)
-                    #for j , [input_val, class_encoded_val, class_names_val, output_val] in enumerate (val_dataloader):
+                #lr_scheduler.step()
+                #print("GT", class_encoded)
+                #print("")
+                #print("Prediction", outputs)
+                #print("")
+                #print("")
 
 
+                if i%50 == 0:
+                    print(i)
+                    for j , [input_val, class_encoded_val, class_names_val, output_val] in enumerate (val_dataloader):
+                            input_val = input.cuda(non_blocking=True)
+                            class_encoded_val = torch.argmax(class_encoded_val, dim=1)
+                            targets = class_encoded_val.cuda(non_blocking=True)
+                            #print("target type", torch.max(targets,1))
+                            model.eval()
+                            outputs_val = model.forward(input_val)
+                            print("outputs_val shape", outputs_val.shape)
+                            outputs_val = torch.argmax(outputs_val,1)
+                            print("GT_EVAL", class_encoded_val)
+                            print("OUTPUT_EVAL", outputs_val)
+                            break
+
+                    model.train()
     total_time = time.time() - start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))
     print(outputs)
