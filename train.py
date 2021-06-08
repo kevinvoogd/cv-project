@@ -34,11 +34,11 @@ def trainmodel(train_loader, model, optimizer, criterion, scheduler, device, epo
         criterion: Loss function (e.g. cross-entropy loss).
         device: cpu/gpu.
     """
-  
+
     avg_loss = 0
     correct = 0
     total = 0
-
+    loss_print = []
     # Iterate through batches
     for i, data in enumerate(train_loader):
         # Get the inputs; data is a list of [inputs, labels]
@@ -57,6 +57,7 @@ def trainmodel(train_loader, model, optimizer, criterion, scheduler, device, epo
         print('Predictions size', outputs.shape)
         print('Targets', labels.shape)
         loss = criterion(outputs, labels)
+        loss_print.append(loss) #for printing the loss
         loss.backward()
         optimizer.step()
         scheduler.step_update(epoch * config.num_steps + i)
@@ -70,7 +71,7 @@ def trainmodel(train_loader, model, optimizer, criterion, scheduler, device, epo
         correct += (predicted == labels).sum().item()
         #print('Number of correct predictions: ', correct)
 
-    return avg_loss / len(train_loader), 100 * correct / total
+    return avg_loss / len(train_loader), 100 * correct / total, loss_print
 
 
 def validate(validation_loader, model, optimizer, scheduler, criterion, device):
@@ -82,23 +83,23 @@ def validate(validation_loader, model, optimizer, scheduler, criterion, device):
 
     for inputs, labels in validation_loader:
         # Transfer Data to GPU if available
-        inputs, labels = inputs.to(device), labels.to(device)   
-          
+        inputs, labels = inputs.to(device), labels.to(device)
+
         # Forward Pass
         outputs = model(inputs)
         # Find the Loss
         loss = criterion(outputs,labels)
         # Calculate Loss
         valid_loss = loss.item() * inputs.size(0)
-        
+
     if min_valid_loss > valid_loss:
         print(f'Validation Loss Decreased({min_valid_loss:.6f\
         }--->{valid_loss:.6f}) \t Saving The Model')
         min_valid_loss = valid_loss
-          
+
         # Saving State Dict
         torch.save(model.state_dict(), 'saved_model.pth')
-    
+
     return avg_loss / len(train_loader), 100 * correct / total
 
 
@@ -116,7 +117,7 @@ def testmodel(test_loader, model, criterion, device):
     avg_loss = 0
     correct = 0
     total = 0
-    
+
     # Use torch.no_grad to skip gradient calculation, not needed for evaluation
     with torch.no_grad():
         # Iterate through batches
@@ -170,14 +171,14 @@ def main():
 
 
     # Create classifier model
-    model = SwinTransformer(hidden_dim = 96, 
-                            layers= (2, 2, 6, 2), 
-                            heads= (3, 6, 12, 24), 
-                            channels=3, 
-                            num_classes=10, 
-                            head_dim=32, 
+    model = SwinTransformer(hidden_dim = 96,
+                            layers= (2, 2, 6, 2),
+                            heads= (3, 6, 12, 24),
+                            channels=3,
+                            num_classes=10,
+                            head_dim=32,
                             window_size=7,
-                            downscaling_factors=(4, 2, 2, 2), 
+                            downscaling_factors=(4, 2, 2, 2),
                             relative_pos_embedding=True
                             )
 
@@ -214,10 +215,12 @@ def main():
 
     start_time = time.time()
     model.train()
+
+
     for epoch in tqdm(range(config.num_epochs)):
         # Train on data
         print('\n Epoch number:', epoch)
-        train_loss, train_acc = trainmodel(train_dataloader,
+        train_loss, train_acc, loss_print = trainmodel(train_dataloader,
                                       model,
                                       optimizer,
                                       loss,
@@ -228,7 +231,11 @@ def main():
 
         # Save the model
         torch.save(model.state_dict(), 'saved_model.pth')
-        
+        print('Training Loss', train_loss )
+
+        with open('Training_loss.pkl','ab') as f:
+          pickle.dump(loss_print, f)
+
     print('\n\n\n Test!')
     # Validate on data
     model.eval()
