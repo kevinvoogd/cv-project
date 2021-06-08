@@ -37,7 +37,7 @@ def testmodel(test_loader, model, criterion, device):
     avg_loss = 0
     correct = 0
     total = 0
-
+    test_loss = []
     # Use torch.no_grad to skip gradient calculation, not needed for evaluation
     with torch.no_grad():
         # Iterate through batches
@@ -53,7 +53,7 @@ def testmodel(test_loader, model, criterion, device):
             # Forward pass
             outputs = model(inputs)
             loss = criterion(outputs, labels)
-
+            test_loss.append(loss)
             # Keep track of loss and accuracy
             avg_loss += loss
             _, predicted = torch.max(outputs.data, 1)
@@ -61,7 +61,7 @@ def testmodel(test_loader, model, criterion, device):
             correct += (predicted == labels).sum().item()
 
 
-    return avg_loss / len(test_loader), 100 * correct / total
+    return avg_loss / len(test_loader), 100 * correct / total, test_loss
 
 def main():
 
@@ -93,7 +93,7 @@ def main():
     # Validate on data
     model.eval()
     loss = torch.nn.CrossEntropyLoss()
-    test_loss, test_acc = testmodel(val_dataloader,
+    test_loss, test_acc, test_loss_print = testmodel(val_dataloader,
                                    model,
                                    loss,
                                    device)
@@ -103,6 +103,8 @@ def main():
     print('\n\n')
     print('Test Accuracy', test_acc)
 
+    with open('Test_loss.pkl','ab') as f:
+      pickle.dump(test_loss_print, f)
 
 if __name__ == "__main__":
     main()
