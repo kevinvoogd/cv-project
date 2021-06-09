@@ -22,7 +22,7 @@ class Config():
         # Starting epoch
         self.starting_epoch = 0
         # Number of epochs
-        self.num_epochs  = 30
+        self.num_epochs  = 100
         # Number of iterations per epoch
         self.iter_per_epoch = 100
         # Number of training steps
