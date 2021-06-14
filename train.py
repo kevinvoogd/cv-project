@@ -234,10 +234,28 @@ def main():
         # Save the model
         torch.save(model.state_dict(), 'saved_model.pth')
         print('Training Loss', train_loss )
+        '''
+        if epoch == 1:
+            torch.save(model.state_dict(), '1_epoch.pth')
 
-        with open('Training_loss.pkl','ab') as f:
-          pickle.dump(loss_print, f)
+        if epoch == 10:
+            torch.save(model.state_dict(), '10_epoch.pth')
 
+        if epoch == 30:
+            torch.save(model.state_dict(), '30_epoch.pth')
+
+        if epoch <=1:
+            with open('Training_loss_1_epoch.pkl','ab') as f:
+              pickle.dump(loss_print, f)
+
+        if epoch <=10:
+            with open('Training_loss_10_epoch.pkl','ab') as f:
+              pickle.dump(loss_print, f)
+
+        if epoch <=30:
+            with open('Training_loss_30_epoch.pkl','ab') as f:
+              pickle.dump(loss_print, f)
+        '''
 '''
     print('\n\n\n Test!')
     # Validate on data
