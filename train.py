@@ -182,6 +182,8 @@ def main():
                             relative_pos_embedding=True
                             )
 
+
+    #model.load_state_dict(torch.load('./models/65_epoch.pth')) ##Change made to load the model and train it to 85th epochs
     # Define optimizer
 
     optimizer = torch.optim.AdamW(model.parameters(),
@@ -236,6 +238,7 @@ def main():
         with open('Training_loss.pkl','ab') as f:
           pickle.dump(loss_print, f)
 
+'''
     print('\n\n\n Test!')
     # Validate on data
     model.eval()
@@ -248,7 +251,7 @@ def main():
     total_time = time.time() - start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))
     print(total_time_str)
-
+'''
 '''
     for epoch in range(config.starting_epoch, config.num_epochs):
         for i, [input,class_encoded, class_names,output] in enumerate(train_dataloader,0):
