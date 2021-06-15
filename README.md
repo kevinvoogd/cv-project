@@ -34,7 +34,7 @@ The Repository also provides multiple [pre-trained models](https://github.com/ke
 
 ##### Testing
 - In [test.py](https://github.com/kevinvoogd/cv-project/blob/main/test.py) select the type of model you want to test. This will generate the pkl file for the test which could eventually be plotted. 
-- 
+
 Note- If you want to visualize the predicted image against ground truth. Set the variabel "Self.showdata" as True in Config.py file.
 
 ##### Plotting the losses
