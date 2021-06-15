@@ -45,6 +45,9 @@ Note- If you want to visualize the predicted image against ground truth. Set the
 ##### Training epochs vs Accuracy
 ![alt text](https://github.com/kevinvoogd/cv-project/blob/main/pictures/Epochs%20vs%20Accuracy.JPG)
 
+##### Training loss (1 Epochs)
+![alt text](https://github.com/kevinvoogd/cv-project/blob/main/pictures/training_1_epoch.JPG)
+
 ##### Training loss (10 Epochs)
 ![alt text](https://github.com/kevinvoogd/cv-project/blob/main/pictures/training_10_epoch.JPG)
 
@@ -53,6 +56,9 @@ Note- If you want to visualize the predicted image against ground truth. Set the
 
 ##### Training loss (100 Epochs)
 ![alt text](https://github.com/kevinvoogd/cv-project/blob/main/pictures/training_100_epoch.JPG)
+
+##### Testing Accuracy (1 Epochs)
+![alt text](https://github.com/kevinvoogd/cv-project/blob/main/pictures/1_epoch.JPG)
 
 ##### Testing Accuracy (10 Epochs)
 ![alt text](https://github.com/kevinvoogd/cv-project/blob/main/pictures/10_epoch.JPG)
