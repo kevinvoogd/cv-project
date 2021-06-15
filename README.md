@@ -19,7 +19,8 @@ Some other python scripts to make the approach more modular.
 
 ##### Datasets
 - [Imagenet Subset](https://github.com/kevinvoogd/cv-project/tree/main/datasets)
-Ground Truth: '0': Cassette Player, '1': Chain Saw, '2': Church, '3': English Springer, '4': French Horn, '5': Garbage Truck, '6': Gas Pump, '7': Golf Ball, '8': Parachute, '9': Tench
+
+- Ground Truth: '0': Cassette Player, '1': Chain Saw, '2': Church, '3': English Springer, '4': French Horn, '5': Garbage Truck, '6': Gas Pump, '7': Golf Ball, '8': Parachute, '9': Tench
 
 ![alt text](https://github.com/kevinvoogd/cv-project/blob/main/pictures/prediction%201_43_epoch_model.JPG)
 ![alt text](https://github.com/kevinvoogd/cv-project/blob/main/pictures/prediction%202_43_epoch_model.JPG)
