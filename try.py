@@ -1,3 +1,9 @@
+# Implementation of Swin Tansformer
+# in Pytorch.
+# Created by: Guru Deep Singh, Kevin Luis Voogd
+
+# Script to try the dataloader and plot the accuracies generated on training and test data
+# Note - This script can be ignored as it was created by the author to check the dataloader and plot the curve for accuracies
 
 from __future__ import print_function
 from __future__ import division
@@ -38,7 +44,7 @@ def main():
     plt.title("Training Epochs vs Accuracy")
     plt.legend()
     plt.show()
-    
+
     train_dataloader = torch.utils.data.DataLoader(train_ds, batch_size=config.batch_size, num_workers=4, shuffle=True)
 
     for i, [input,class_encoded, class_names,output] in enumerate(train_dataloader,0):

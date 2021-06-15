@@ -1,3 +1,10 @@
+# Implementation of Swin Tansformer
+# in Pytorch.
+# Created by: Guru Deep Singh, Kevin Luis Voogd
+
+# Script for testing the model trained
+#Note - Here the validation set is used for testing the model i.e. there is no validation set used to perform hyperparameter optimization
+
 from __future__ import print_function
 from __future__ import division
 import torch
@@ -54,12 +61,14 @@ def testmodel(test_loader, model, criterion, device):
             outputs = model(inputs)
             loss = criterion(outputs, labels)
             test_loss.append(loss)
+
             # Keep track of loss and accuracy
             avg_loss += loss
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
 
+            # To display the images and their prediction change Self.showdata = True in Config file
             if config.showdata:
                 inputs = inputs.to("cpu")
                 img = inputs.permute(0, 2, 3, 1)
@@ -111,7 +120,6 @@ def main():
                                    model,
                                    loss,
                                    device)
-
 
     print('Test Loss', test_loss)
     print('\n\n')

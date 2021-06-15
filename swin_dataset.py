@@ -1,3 +1,9 @@
+# Implementation of Swin Tansformer
+# in Pytorch.
+# Created by: Guru Deep Singh, Kevin Luis Voogd
+
+# Script to load the dataset 
+
 from PIL import Image
 import torch
 from torch.utils.data import Dataset
@@ -18,9 +24,8 @@ centerCrop = transforms.CenterCrop(config.input_size)
 toTensor   = transforms.ToTensor()
 toPIL      = transforms.ToPILImage()
 
-# Assumes given data directory (train, val, etc) has a directory called "images"
+# Assumes given data directory (train, val) has a directory called "datasets"
 # Loads image as both inputs and outputs
-# Applies different transforms to both input and output
 class SwinDataset(Dataset):
     def __init__(self, mode, input_transforms):
         self.mode = mode
@@ -44,10 +49,10 @@ class SwinDataset(Dataset):
         output = input.copy()
         if self.mode == "train" and config.variationalTranslation > 0:
             output = randomCrop(input)
-        #input = toTensor(centerCrop(input))
+
         input = toTensor(input)
         output = toTensor(output)
-        #class_encoded = toTensor(class_encoded)
+
         return input, class_encoded, class_name, output
 
     def get_image_list(self):
@@ -57,7 +62,7 @@ class SwinDataset(Dataset):
         for classes in os.listdir(self.data_path):
             self.unique_class.append(classes)
             self.image_dir = os.path.join(self.data_path, classes)
-            #print(self.image_dir)
+
             for file in os.listdir(self.image_dir):
                 if file.endswith(file_ext):
                     path = os.path.join(self.image_dir, file)

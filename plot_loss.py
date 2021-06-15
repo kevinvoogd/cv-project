@@ -1,3 +1,8 @@
+# Implementation of Swin Tansformer
+# in Pytorch.
+# Created by: Guru Deep Singh, Kevin Luis Voogd
+
+#Script to plot the data generated from training and testing a model
 import pickle
 import numpy
 import matplotlib.pyplot as plt
@@ -5,14 +10,14 @@ import matplotlib.pyplot as plt
 
 training_loss = []
 testing_loss = []
-with open('Training_loss.pkl','rb') as f:
+with open('./pkl_files/Training_loss_43_epoch.pkl','rb') as f:      #Change the epoch number to print different data
     while True:
         try:
             training_loss.append(pickle.load(f))
         except EOFError:
             break
 
-with open('Test_loss.pkl','rb') as f:
+with open('./pkl_files/Test_loss_43_epoch.pkl','rb') as f:          #Change the epoch number to print different data
     while True:
         try:
             testing_loss.append(pickle.load(f))

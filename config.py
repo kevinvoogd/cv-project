@@ -1,3 +1,8 @@
+# Implementation of Swin Tansformer
+# in Pytorch.
+# Created by: Guru Deep Singh, Kevin Luis Voogd
+
+#Script to define variables used in the repository
 class Config():
     def __init__(self):
         self.input_size = 224 # Side length of square image patch

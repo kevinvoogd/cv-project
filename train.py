@@ -1,4 +1,8 @@
+# Implementation of Swin Tansformer
+# in Pytorch.
+# Created by: Guru Deep Singh, Kevin Luis Voogd
 
+# Script to train Swin Transformer model on Imagenet Subset (10 classes)
 from __future__ import print_function
 from __future__ import division
 import torch
@@ -103,44 +107,6 @@ def validate(validation_loader, model, optimizer, scheduler, criterion, device):
     return avg_loss / len(train_loader), 100 * correct / total
 
 
-def testmodel(test_loader, model, criterion, device):
-    """
-    Evaluates network in batches.
-
-    Args:
-        test_loader: Data loader for test set.
-        model: Neural network model.
-        criterion: Loss function (e.g. cross-entropy loss).
-        device: cpu/gpu
-    """
-
-    avg_loss = 0
-    correct = 0
-    total = 0
-
-    # Use torch.no_grad to skip gradient calculation, not needed for evaluation
-    with torch.no_grad():
-        # Iterate through batches
-        for i, data in enumerate(test_loader):
-            # Get the inputs; data is a list of [inputs, labels]
-            inputs, labels, _, _ = data
-            labels = labels.type(torch.LongTensor)
-            labels = torch.argmax(labels, dim=1)
-
-            # Move data to target device
-            inputs, labels = inputs.to(device), labels.to(device)
-
-            # Forward pass
-            outputs = model(inputs)
-            loss = criterion(outputs, labels)
-
-            # Keep track of loss and accuracy
-            avg_loss += loss
-            _, predicted = torch.max(outputs.data, 1)
-            total += labels.size(0)
-            correct += (predicted == labels).sum().item()
-
-    return avg_loss / len(test_loader), 100 * correct / total
 
 def main():
     config = Config()
@@ -153,21 +119,13 @@ def main():
         transforms.ToTensor()
         ])
 
-    val_xform = transforms.Compose([
-        transforms.Resize((config.input_size, config.input_size)),
-        transforms.ToTensor()
-        ])
 
     # Train and validation datasets
     train_ds = SwinDataset("train", train_xform)
-    val_ds = SwinDataset("val", val_xform)
 
     # Train and Validation dataloaders
     train_dataloader = torch.utils.data.DataLoader(
         train_ds, batch_size=config.batch_size, num_workers=4, shuffle=True)
-
-    val_dataloader = torch.utils.data.DataLoader(
-        val_ds, batch_size=config.batch_size, num_workers=4, shuffle=True)
 
 
     # Create classifier model
@@ -183,7 +141,6 @@ def main():
                             )
 
 
-    #model.load_state_dict(torch.load('./models/65_epoch.pth')) ##Change made to load the model and train it to 85th epochs
     # Define optimizer
 
     optimizer = torch.optim.AdamW(model.parameters(),
@@ -215,7 +172,6 @@ def main():
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     model = model.to(device)
 
-    start_time = time.time()
     model.train()
 
 
@@ -234,83 +190,7 @@ def main():
         # Save the model
         torch.save(model.state_dict(), 'saved_model.pth')
         print('Training Loss', train_loss )
-        '''
-        if epoch == 1:
-            torch.save(model.state_dict(), '1_epoch.pth')
 
-        if epoch == 10:
-            torch.save(model.state_dict(), '10_epoch.pth')
-
-        if epoch == 30:
-            torch.save(model.state_dict(), '30_epoch.pth')
-
-        if epoch <=1:
-            with open('Training_loss_1_epoch.pkl','ab') as f:
-              pickle.dump(loss_print, f)
-
-        if epoch <=10:
-            with open('Training_loss_10_epoch.pkl','ab') as f:
-              pickle.dump(loss_print, f)
-
-        if epoch <=30:
-            with open('Training_loss_30_epoch.pkl','ab') as f:
-              pickle.dump(loss_print, f)
-        '''
-'''
-    print('\n\n\n Test!')
-    # Validate on data
-    model.eval()
-    test_loss, test_acc = testmodel(val_dataloader,
-                                   model,
-                                   loss,
-                                   device)
-
-
-    total_time = time.time() - start_time
-    total_time_str = str(datetime.timedelta(seconds=int(total_time)))
-    print(total_time_str)
-'''
-'''
-    for epoch in range(config.starting_epoch, config.num_epochs):
-        for i, [input,class_encoded, class_names,output] in enumerate(train_dataloader,0):
-
-                optimizer.zero_grad()
-                input = input.cuda(non_blocking=True)
-                class_encoded = torch.argmax(class_encoded, dim=1)
-                targets = class_encoded.cuda(non_blocking=True)
-                #print("target type", torch.max(targets,1))
-                outputs = model.forward(input)
-
-                #print("output type", torch.max(outputs,1))
-
-                ce_loss = loss(outputs, targets)
-                ce_loss.backward()
-                optimizer.step()
-                #lr_scheduler.step()
-                #print("GT", class_encoded)
-                #print("")
-                #print("Prediction", outputs)
-                #print("")
-                #print("")
-
-
-                if i%50 == 0:
-                    print(i)
-                    for j , [input_val, class_encoded_val, class_names_val, output_val] in enumerate (val_dataloader):
-                            input_val = input.cuda(non_blocking=True)
-                            class_encoded_val = torch.argmax(class_encoded_val, dim=1)
-                            targets = class_encoded_val.cuda(non_blocking=True)
-                            #print("target type", torch.max(targets,1))
-                            model.eval()
-                            outputs_val = model.forward(input_val)
-                            print("outputs_val shape", outputs_val.shape)
-                            outputs_val = torch.argmax(outputs_val,1)
-                            print("GT_EVAL", class_encoded_val)
-                            print("OUTPUT_EVAL", outputs_val)
-                            break
-
-                    model.train()
-'''
 
 if __name__ == "__main__":
     main()
