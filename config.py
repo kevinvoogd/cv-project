@@ -5,7 +5,7 @@ class Config():
         self.val_batch_size = 4
         self.plot_test_batch_size = 10
 
-        self.showdata = True
+        self.showdata = False
         self.data_dir = "./datasets" # Directory of images
 
         # Each item in the following list specifies a module.

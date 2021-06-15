@@ -102,7 +102,7 @@ def main():
                             downscaling_factors=(4, 2, 2, 2),
                             relative_pos_embedding=True
                             )
-    model.load_state_dict(torch.load('./models/43_epoch.pth'))
+    model.load_state_dict(torch.load('./models/100_epoch.pth'))
     model = model.to(device)
     # Validate on data
     model.eval()
