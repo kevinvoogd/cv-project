@@ -24,7 +24,7 @@ Some other python scripts to make the approach more modular.
 ![alt text](https://github.com/kevinvoogd/cv-project/blob/main/pictures/prediction%202_43_epoch_model.JPG)
 ![alt text](https://github.com/kevinvoogd/cv-project/blob/main/pictures/prediction%203_43_epoch_model.JPG)
 
-The Repository also provides multiple [pre-trained models](https://github.com/kevinvoogd/cv-project/tree/main/models) which we trained ourselves from scratch. We have also provided all the loss file generated while training and testing.[Pkl](https://github.com/kevinvoogd/cv-project/tree/main/pkl_files)
+The Repository also provides multiple [pre-trained models](https://github.com/kevinvoogd/cv-project/tree/main/models) which we trained ourselves from scratch. We have also provided all the loss file generated while training and testing. [Pkl](https://github.com/kevinvoogd/cv-project/tree/main/pkl_files)
 
 ## How to use this repository
 - Clone the Repository
