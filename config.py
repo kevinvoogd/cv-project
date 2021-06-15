@@ -3,10 +3,10 @@ class Config():
         self.input_size = 224 # Side length of square image patch
         self.batch_size = 15
         self.val_batch_size = 4
-        self.test_batch_size = 1
+        self.plot_test_batch_size = 10
 
+        self.showdata = True
         self.data_dir = "./datasets" # Directory of images
-        self.showdata = False # Debug the data augmentation by showing the data we're training on.
 
         # Each item in the following list specifies a module.
         # Each item is the number of input channels to the module.

@@ -60,6 +60,20 @@ def testmodel(test_loader, model, criterion, device):
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
 
+            if config.showdata:
+                inputs = inputs.to("cpu")
+                img = inputs.permute(0, 2, 3, 1)
+                fig = plt.figure(figsize= (8,10))
+                for l in range(config.plot_test_batch_size):
+                    j =l+1
+                    ax = fig.add_subplot(5,2,j)
+                    ax.title.set_text('Prediction {}, Ground Truth {}'.format(predicted[l], labels[l]))
+                    #ax.figure.set_size_inches(5, 5)
+                    plt.imshow(img[l])
+                fig.subplots_adjust(hspace=0.8)
+                fig.subplots_adjust(wspace=0.1)
+                plt.show()
+
 
     return avg_loss / len(test_loader), 100 * correct / total, test_loss
 
@@ -88,7 +102,7 @@ def main():
                             downscaling_factors=(4, 2, 2, 2),
                             relative_pos_embedding=True
                             )
-    model.load_state_dict(torch.load('.models/30_epoch.pth'))
+    model.load_state_dict(torch.load('./models/43_epoch.pth'))
     model = model.to(device)
     # Validate on data
     model.eval()
