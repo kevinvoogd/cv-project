@@ -57,7 +57,7 @@ def main():
         fig = plt.figure(figsize=(8, 8))
         for i in range(config.batch_size):
             j =i+1
-            fig.add_subplot(2,3,j)
+            fig.add_subplot(4,4,j)
             plt.imshow(img[i])
         plt.show()
 

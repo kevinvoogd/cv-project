@@ -7,7 +7,7 @@ class Config():
     def __init__(self):
         self.input_size = 224 # Side length of square image patch
         self.batch_size = 15
-        self.val_batch_size = 4
+        self.val_batch_size = 6
         self.plot_test_batch_size = 10
 
         self.showdata = False
