@@ -10,14 +10,16 @@ import matplotlib.pyplot as plt
 
 training_loss = []
 testing_loss = []
-with open('./pkl_files/Training_loss_43_epoch.pkl','rb') as f:      #Change the epoch number to print different data
+epoch = str(100)
+print('Plotting test and training losses for Epoch:'+epoch)
+with open('./pkl_files/Training_loss_'+epoch+'_epoch.pkl','rb') as f:      #Change the epoch number to print different data
     while True:
         try:
             training_loss.append(pickle.load(f))
         except EOFError:
             break
 
-with open('./pkl_files/Test_loss_43_epoch.pkl','rb') as f:          #Change the epoch number to print different data
+with open('./pkl_files/Test_loss_'+epoch+'_epoch.pkl','rb') as f:          #Change the epoch number to print different data
     while True:
         try:
             testing_loss.append(pickle.load(f))
@@ -44,11 +46,11 @@ plt.title("Training Loss")
 plt.ylabel("Loss")
 plt.xlabel("Per Iteration (Batch Size 15)")
 plt.plot(train_loss)
+plt.savefig('pictures/training_'+epoch+'_epoch.JPG')
 
 plt.figure(2)
 plt.title("Testing Loss")
 plt.ylabel("Loss")
 plt.xlabel("Per Iteration (Batch Size 15)")
 plt.plot(test_loss)
-
-plt.show()
+plt.savefig('pictures/test_'+epoch+'_epoch.JPG')
