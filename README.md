@@ -6,7 +6,7 @@
 In this repository we aim to develop a Computer Vision by Deep Learning project for the course CS4245 of TU Delft. In this repository, we use the findings of the paper *[Swin Transformer: Hierarchical Vision Transformer using Shifted Windows](https://arxiv.org/pdf/2103.14030.pdf)*. In the paper the authors propose a new general-purpose backbone structure for computer vision.
 
 ## Adapted Model
-- [Swin Transformer](https://github.com/microsoft/Swin-Transformer/blob/main/models/swin_transformer.py)
+- [Swin Transformer](https://github.com/berniwal/swin-transformer-pytorch)
 
 ## Repository Contents
 This repository is self-contained.
